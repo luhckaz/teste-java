@@ -1,0 +1,32 @@
+<Configuration packages="biz.paluch.logging.gelf.log4j2">
+    <Appenders>
+        <Gelf name="gelf"
+              host="tcp:10.6.2.165"
+              port="1515"
+              version="1.1"
+              extractStackTrace="true"
+              filterStackTrace="true"
+              mdcProfiling="true"
+              facility="@log-facility@"
+              includeFullMdc="true"
+              additionalFieldTypes="version=String"
+              maximumMessageSize="8192">
+            <Field name="line" pattern="%L"/>
+            <Field name="severity" pattern="%-5p" />
+            <Field name="simpleClassName" pattern="%C{1}" />
+            <Field name="className" pattern="%C" />
+            <Field name="version" literal="@version@"/>
+            <Field name="server" pattern="%host" />
+            <Field name="app" literal="@artifactId@" />
+        </Gelf>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{%d{dd-MM-yyyy HH:mm:ss} %-5p %c{1}:%L - %m%n}{FATAL=magenta blink, ERROR=red, WARN=yellow normal, INFO=black normal , DEBUG=cyan normal, TRACE=blue}" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="TRACE">
+            <AppenderRef ref="console" level="INFO" />
+            <AppenderRef ref="gelf" level="@log.level@" />
+        </Root>
+    </Loggers>
+</Configuration>

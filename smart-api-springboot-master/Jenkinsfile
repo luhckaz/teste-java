@@ -1,0 +1,5 @@
+jenkinsfileJava(
+        ['target/smart-api.war'],
+        ['integracao@10.6.1.222:/opt/deploy'],
+        'JDK_11'
+)

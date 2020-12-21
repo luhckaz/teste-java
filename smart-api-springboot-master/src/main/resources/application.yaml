@@ -1,0 +1,46 @@
+server:
+  address: @server.address@
+  port: @server.port@
+  servlet:
+    context-path: /smart-api
+    session:
+      cookie:
+        name: UISESSION
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  profiles:
+    active: @spring.profiles.active@
+  boot:
+    admin:
+      client:
+        url: @spring.boot.admin.client.url@
+        instance:
+          name: Smart API
+  datasource:
+    username: @spring.datasource.username@
+    password: @spring.datasource.password@
+    driver-class-name: @spring.datasource.driver-class-name@
+    url: @spring.datasource.url@
+  output:
+    ansi:
+      enabled: always
+  thymeleaf:
+    cache: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  server:
+    port: @management.server.port@
+    address: @management.server.address@
+    ssl:
+      enabled: false
+project:
+  artifactId: @project.artifactId@
+  name: @project.name@
+  version: @project.version@
+  description: @project.description@

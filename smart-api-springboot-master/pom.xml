@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>gov.goias</groupId>
+    <artifactId>smart-api-springboot</artifactId>
+    <version>2.1.0</version>
+    <packaging>war</packaging>
+    <name>Smart Api</name>
+    <description>Sistema Modelo de Arquitetura e Tecnologia da Informacao</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <springfox-boot.version>3.0.0</springfox-boot.version>
+        <modelmapper.version>2.3.0</modelmapper.version>
+
+	    <spring-boot-admin.version>2.3.0</spring-boot-admin.version>
+	    <logstash-gelf.version>1.14.1</logstash-gelf.version>
+    </properties>
+
+    <build>
+        <finalName>smart-api</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <!--Necessario para substituir a parametrizacao que esta nos arquivos existentes em /resources -->
+                    <webResources>
+                        <resource>
+                            <directory>src/main/resources</directory>
+                            <targetPath>WEB-INF/classes</targetPath>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>application.yaml</include>
+                                <include>log4j2.xml</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.ojdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+    	<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>biz.paluch.logging</groupId>
+            <artifactId>logstash-gelf</artifactId>
+            <version>${logstash-gelf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+	<dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-dependencies</artifactId>
+                <version>${spring-boot-admin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+
+        <profile>
+            <id>localh2</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+
+                <spring.profiles.active>localh2</spring.profiles.active>
+
+                <log.level>debug</log.level>
+                <log-facility>jbosslocalsegplan</log-facility>
+
+                <server.address>localhost</server.address>
+                <server.port>8088</server.port>
+
+                <management.server.address>localhost</management.server.address>
+                <management.server.port>8090</management.server.port>
+
+                <spring.boot.admin.client.url>http://localhost:8081/boot-admin</spring.boot.admin.client.url>
+
+                <spring.datasource.username>sa</spring.datasource.username>
+                <spring.datasource.password></spring.datasource.password>
+                <spring.datasource.url>jdbc:h2:mem:smart-api;DB_CLOSE_ON_EXIT=FALSE</spring.datasource.url>
+                <spring.datasource.driver-class-name>org.h2.Driver</spring.datasource.driver-class-name>
+
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>local</id>
+            <properties>
+
+                <spring.profiles.active>local</spring.profiles.active>
+
+                <log.level>debug</log.level>
+                <log-facility>jbosslocalsegplan</log-facility>
+
+                <server.address>localhost</server.address>
+                <server.port>8088</server.port>
+
+                <management.server.address>localhost</management.server.address>
+                <management.server.port>8090</management.server.port>
+
+                <spring.boot.admin.client.url>http://localhost:8081/boot-admin</spring.boot.admin.client.url>
+
+                <spring.datasource.username>dotuser</spring.datasource.username>
+                <spring.datasource.password>d4fJU96!#aQ</spring.datasource.password>
+                <spring.datasource.url>jdbc:oracle:thin:@//exa01-scan7.intra.goias.gov.br:1521/dbdes</spring.datasource.url>
+                <spring.datasource.driver-class-name>oracle.jdbc.OracleDriver</spring.datasource.driver-class-name>
+
+            </properties>
+        </profile>
+
+
+        <profile>
+            <id>desenv</id>
+            <properties>
+
+                <spring.profiles.active>desenv</spring.profiles.active>
+
+                <log.level>debug</log.level>
+                <log-facility>jbossdessegplan</log-facility>
+
+                <server.address>jbdescorp05.intra.goias.gov.br</server.address>
+                <server.port>8088</server.port>
+
+                <management.server.address>jbdescorp05.intra.goias.gov.br</management.server.address>
+                <management.server.port>8090</management.server.port>
+
+                <spring.boot.admin.client.url>http://corpdes.intra.goias.gov.br/boot-admin</spring.boot.admin.client.url>
+
+                <spring.datasource.username>dotuser</spring.datasource.username>
+                <spring.datasource.password>d4fJU96!#aQ</spring.datasource.password>
+                <spring.datasource.url>jdbc:oracle:thin:@//exa01-scan7.intra.goias.gov.br:1521/dbdes</spring.datasource.url>
+                <spring.datasource.driver-class-name>oracle.jdbc.OracleDriver</spring.datasource.driver-class-name>
+
+            </properties>
+        </profile>
+
+        <profile>
+            <id>test</id>
+            <properties>
+
+                <spring.profiles.active>test</spring.profiles.active>
+
+                <log.level>error</log.level>
+                <log-facility></log-facility>
+
+                <spring.boot.admin.client.url>http://naoexisteteste.go.gov.br/boot-admin</spring.boot.admin.client.url>
+
+            </properties>
+        </profile>
+
+        <profile>
+            <id>homolog</id>
+            <properties>
+
+                <spring.profiles.active>homolog</spring.profiles.active>
+
+                <log.level>error</log.level>
+                <log-facility>jbosshomsegplan</log-facility>
+
+                <spring.boot.admin.client.url>https://boot-admin.sistemashomolog.go.gov.br/boot-admin</spring.boot.admin.client.url>
+
+            </properties>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <properties>
+
+                <spring.profiles.active>prod</spring.profiles.active>
+
+                <log.level>error</log.level>
+                <log-facility>jbossprodsegplan</log-facility>
+
+                <spring.boot.admin.client.url>https://boot-admin.sistemas.go.gov.br/boot-admin</spring.boot.admin.client.url>
+
+            </properties>
+        </profile>
+
+    </profiles>
+
+</project>

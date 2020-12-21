@@ -1,0 +1,15 @@
+${Ansi.YELLOW}**********************************************************************************************************
+
+${Ansi.RED}  ____                               _          _      ____    ___
+${Ansi.RED} / ___|   _ __ ___     __ _   _ __  | |_       / \    |  _ \  |_ _|
+${Ansi.RED} \___ \  | '_ ` _ \   / _` | | '__| | __|     / _ \   | |_) |  | |
+${Ansi.RED}  ___) | | | | | | | | (_| | | |    | |_     / ___ \  |  __/   | |
+${Ansi.RED} |____/  |_| |_| |_|  \__,_| |_|     \__|   /_/   \_\ |_|     |___|
+${Ansi.RED}
+
+${Ansi.GREEN} Application           : ${project.artifactId}
+${Ansi.GREEN} Application Version   : ${project.version}
+${Ansi.GREEN} Application Title     : ${project.name}
+${Ansi.GREEN} Spring Boot Version   : ${spring-boot.version}
+
+${Ansi.YELLOW}**********************************************************************************************************
